@@ -1,18 +1,369 @@
+
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Pokémon List</ion-title>
+  <ion-toolbar color="tertiary">
+    <ion-title>PokeAPP</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-list>
-    <ion-item *ngFor="let pokemon of pokemons">
-      <ion-label>{{ pokemon.name | titlecase }}</ion-label>
-      <a href="{{ pokemon.url}}"><ion-label>{{ pokemon.url}}</ion-label></a>
-      
-    </ion-item>
-  
-  </ion-list>
+<ion-content class="pokedex-content">
 
-  <ion-spinner *ngIf="loading" class="loading-spinner"></ion-spinner>
+  <!-- Pestañas de navegación -->
+  <div class="page-tabs">
+    <ion-button
+      [fill]="activeTab === 'pokedex' ? 'solid' : 'outline'"
+      color="tertiary"
+      (click)="activeTab = 'pokedex'">      Pokedex
+    </ion-button>
+
+    <ion-button
+      [fill]="activeTab === 'comparar' ? 'solid' : 'outline'"
+      color="tertiary"
+      (click)="activeTab = 'comparar'">
+      Comparar
+    </ion-button>
+  </div>
+
+  <!-- ================= PESTAÑA POKÉDEX ================= -->
+  <div *ngIf="activeTab === 'pokedex'">
+
+    <div class="hero">
+      <h1>¡Encuentra tu Pokémon!</h1>
+      <p>Descubre sus tipos, habilidades y características.</p>
+    </div>
+
+    <div class="search-container">
+      <ion-searchbar
+        [(ngModel)]="searchTerm"
+        placeholder="Nombre o número (ej. Pikachu)"
+        searchIcon="search-outline"
+        animated="true"
+        (keyup.enter)="searchPokemon()">
+      </ion-searchbar>
+
+      <ion-button expand="block" color="tertiary" (click)="searchPokemon()">
+        <ion-icon name="search-outline" slot="start"></ion-icon>
+        Buscar Pokémon
+      </ion-button>
+
+      <ion-button
+        *ngIf="selectedPokemon || errorMessage"
+        expand="block"
+        fill="clear"
+        color="medium"
+        (click)="clearSearch()">
+        Ver todos los Pokémon
+      </ion-button>
+    </div>
+
+    <div class="message" *ngIf="loading">
+      <ion-spinner name="crescent" color="tertiary"></ion-spinner>
+      <p>Buscando Pokémon...</p>
+    </div>
+
+    <ion-card class="error-card" *ngIf="errorMessage && !loading">
+      <ion-card-content>
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        {{ errorMessage }}
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Detalles del Pokémon -->
+    <ion-card class="pokemon-detail" *ngIf="selectedPokemon && !loading">
+
+      <div class="pokemon-image">
+        <img
+          [src]="getPokemonImage(selectedPokemon)"
+          [alt]="selectedPokemon.name">
+      </div>
+
+      <ion-card-header>
+        <ion-card-subtitle>
+          N.º {{ selectedPokemon.id }}
+        </ion-card-subtitle>
+        <ion-card-title>
+          {{ selectedPokemon.name | titlecase }}
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <h2>Sonido del Pokémon</h2>
+        <ion-button
+          expand="block"
+          color="tertiary"
+          (click)="playPokemonSound()">
+          <ion-icon name="volume-high-outline" slot="start"></ion-icon>
+          Escuchar sonido
+        </ion-button>
+
+        <h2>Tipo</h2>
+        <div class="type-list">
+          <ion-badge
+            *ngFor="let item of selectedPokemon.types"
+            color="success">
+            {{ item.type.name | titlecase }}
+          </ion-badge>
+        </div>
+
+        <h2>Características</h2>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <div class="stat-box">
+                <ion-icon name="resize-outline"></ion-icon>
+                <p>Altura</p>
+                <strong>{{ selectedPokemon.height / 10 }} m</strong>
+              </div>
+            </ion-col>
+
+            <ion-col size="6">
+              <div class="stat-box">
+                <ion-icon name="barbell-outline"></ion-icon>
+                <p>Peso</p>
+                <strong>{{ selectedPokemon.weight / 10 }} kg</strong>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <h2>Habilidades</h2>
+        <div class="type-list">
+          <ion-badge
+            *ngFor="let ability of selectedPokemon.abilities"
+            color="tertiary">
+            {{ ability.ability.name | titlecase }}
+          </ion-badge>
+        </div>
+
+        <h2>Estadísticas</h2>
+        <div class="stat-row" *ngFor="let stat of selectedPokemon.stats">
+          <div class="stat-heading">
+            <span>{{ stat.stat.name | titlecase }}</span>
+            <strong>{{ stat.base_stat }}</strong>
+          </div>
+          <ion-progress-bar
+            color="tertiary"
+            [value]="stat.base_stat / 255">
+          </ion-progress-bar>
+        </div>
+
+        <h2>Galería del Pokémon</h2>
+        <div class="pokemon-gallery">
+          <div
+            class="gallery-item"
+            *ngFor="let image of getPokemonGallery(selectedPokemon)">
+            <img
+              [src]="image"
+              [alt]="selectedPokemon.name"
+              loading="lazy">
+          </div>
+        </div>
+
+        <p *ngIf="getPokemonGallery(selectedPokemon).length < 5">
+          Algunas imágenes adicionales no están disponibles para este Pokémon.
+        </p>
+
+        <h2>Pokémon animado</h2>
+        <div class="pokemon-animation">
+          <img
+            [src]="getPokemonAnimation(selectedPokemon)"
+            [alt]="'Animación de ' + selectedPokemon.name">
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Lista de Pokémon -->
+    <section *ngIf="!selectedPokemon && !loading">
+
+      <div class="section-heading">
+        <h2>Explora Pokémon</h2>
+        <p>Selecciona uno para consultar sus detalles.</p>
+      </div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col
+            size="6"
+            size-md="4"
+            size-lg="3"
+            *ngFor="let pokemon of pokemons">
+
+            <ion-card
+              class="pokemon-item"
+              button="true"
+              (click)="selectPokemon(pokemon.name)">
+
+              <ion-card-content>
+                <div class="pokemon-number">Pokémon</div>
+
+                <div class="pokemon-thumbnail">
+                  <img
+                    [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
+                    pokemon.url.split('/')[pokemon.url.split('/').length - 2] + '.png'"
+                    [alt]="pokemon.name"
+                    loading="lazy">
+                </div>
+
+                <h3>{{ pokemon.name | titlecase }}</h3>
+
+                <ion-button
+                  size="small"
+                  fill="outline"
+                  color="tertiary">
+                  Ver detalles
+                </ion-button>
+              </ion-card-content>
+
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </section>
+
+  </div>
+
+  <!-- ================= PESTAÑA COMPARAR ================= -->
+  <div *ngIf="activeTab === 'comparar'" class="compare-section">
+
+    <div class="hero">
+      <h1>¡Compara Pokémon!</h1>
+      <p>Elige dos Pokémon y descubre sus diferencias.</p>
+    </div>
+
+    <ion-card>
+      <ion-card-content>
+        <ion-item>
+          <ion-input
+            [(ngModel)]="compareSearch1"
+            label="Primer Pokémon"
+            labelPlacement="stacked"
+            placeholder="Ej. pikachu o 25">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input
+            [(ngModel)]="compareSearch2"
+            label="Segundo Pokémon"
+            labelPlacement="stacked"
+            placeholder="Ej. charizard o 6">
+          </ion-input>
+        </ion-item>
+
+        <ion-button
+          expand="block"
+          color="tertiary"
+          (click)="comparePokemon()">
+          <ion-icon name="git-compare-outline" slot="start"></ion-icon>
+          Comparar Pokémon
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="error-card" *ngIf="compareError">
+      <ion-card-content>
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        {{ compareError }}
+      </ion-card-content>
+    </ion-card>
+
+    <div class="message" *ngIf="compareLoading">
+      <ion-spinner name="crescent" color="tertiary"></ion-spinner>
+      <p>Comparando Pokémon...</p>
+    </div>
+
+    <!-- Resultados -->
+    <ion-grid *ngIf="comparison1 && comparison2 && !compareLoading">
+      <ion-row>
+
+        <!-- Primer Pokémon -->
+        <ion-col size="6">
+          <ion-card class="comparison-card">
+            <div class="comparison-image">
+              <img
+                [src]="getPokemonImage(comparison1)"
+                [alt]="comparison1.name">
+            </div>
+
+            <ion-card-header>
+              <ion-card-subtitle>N.º {{ comparison1.id }}</ion-card-subtitle>
+              <ion-card-title>
+                {{ comparison1.name | titlecase }}
+              </ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+              <p><strong>Altura:</strong> {{ comparison1.height / 10 }} m</p>
+              <p><strong>Peso:</strong> {{ comparison1.weight / 10 }} kg</p>
+
+              <p><strong>Tipos:</strong></p>
+              <div class="type-list">
+                <ion-badge *ngFor="let item of comparison1.types">
+                  {{ item.type.name | titlecase }}
+                </ion-badge>
+              </div>
+
+              <h3>Estadísticas</h3>
+              <div class="comparison-stat" *ngFor="let stat of comparison1.stats">
+                <div class="stat-heading">
+                  <span>{{ stat.stat.name | titlecase }}</span>
+                  <strong>{{ stat.base_stat }}</strong>
+                </div>
+                <ion-progress-bar
+                  color="tertiary"
+                  [value]="stat.base_stat / 255">
+                </ion-progress-bar>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <!-- Segundo Pokémon -->
+        <ion-col size="6">
+          <ion-card class="comparison-card">
+            <div class="comparison-image">
+              <img
+                [src]="getPokemonImage(comparison2)"
+                [alt]="comparison2.name">
+            </div>
+
+            <ion-card-header>
+              <ion-card-subtitle>N.º {{ comparison2.id }}</ion-card-subtitle>
+              <ion-card-title>
+                {{ comparison2.name | titlecase }}
+              </ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+              <p><strong>Altura:</strong> {{ comparison2.height / 10 }} m</p>
+              <p><strong>Peso:</strong> {{ comparison2.weight / 10 }} kg</p>
+
+              <p><strong>Tipos:</strong></p>
+              <div class="type-list">
+                <ion-badge *ngFor="let item of comparison2.types">
+                  {{ item.type.name | titlecase }}
+                </ion-badge>
+              </div>
+
+              <h3>Estadísticas</h3>
+              <div class="comparison-stat" *ngFor="let stat of comparison2.stats">
+                <div class="stat-heading">
+                  <span>{{ stat.stat.name | titlecase }}</span>
+                  <strong>{{ stat.base_stat }}</strong>
+                </div>
+                <ion-progress-bar
+                  color="tertiary"
+                  [value]="stat.base_stat / 255">
+                </ion-progress-bar>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+
+  </div>
+
 </ion-content>

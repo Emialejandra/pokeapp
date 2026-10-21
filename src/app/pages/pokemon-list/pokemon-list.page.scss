@@ -1,0 +1,560 @@
+:host {
+    --text-primary: #292640;
+    --text-secondary: #827d99;
+    --accent: #e83e4d;
+    --page-bg: #f5f3fb;
+    --card-bg: #ffffff;
+}
+
+.pokedex-content {
+    --background: var(--page-bg);
+    color: var(--text-primary);
+}
+
+/* Barra superior */
+ion-header ion-toolbar {
+    --background: #ffffff;
+    --color: var(--text-primary);
+    --border-width: 0;
+    padding: 5px 8px;
+}
+
+ion-header ion-title {
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+/* Presentación */
+.hero {
+    position: relative;
+    padding: 30px 22px 32px;
+    overflow: hidden;
+    text-align: left;
+    color: var(--text-primary);
+    background: linear-gradient(135deg, #eee8ff, #ffe9ed);
+    border-radius: 0 0 30px 30px;
+}
+
+.hero::after {
+    content: "✦";
+    position: absolute;
+    top: 5px;
+    right: 22px;
+    color: rgba(232, 62, 77, 0.2);
+    font-size: 76px;
+}
+
+.hero h1 {
+    position: relative;
+    z-index: 1;
+    max-width: 280px;
+    margin: 0 0 10px;
+    font-size: clamp(25px, 6vw, 32px);
+    font-weight: 850;
+    line-height: 1.18;
+    letter-spacing: -1px;
+}
+
+.hero p {
+    position: relative;
+    z-index: 1;
+    max-width: 290px;
+    margin: 0;
+    color: #77718e;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Buscador */
+.search-container {
+    padding: 22px 18px 14px;
+}
+
+.search-container ion-searchbar {
+    --background: #ffffff;
+    --color: #292640;
+    --placeholder-color: #a09bb2;
+    --icon-color: #918aa8;
+    --clear-button-color: #918aa8;
+    --border-radius: 16px;
+    --box-shadow: 0 5px 20px rgba(55, 42, 95, 0.06);
+    padding: 0 0 10px;
+}
+
+.search-container ion-button {
+    min-height: 48px;
+    margin: 6px 0;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0;
+    --background: var(--accent);
+    --background-hover: #d52f40;
+    --color: #ffffff;
+    --border-radius: 15px;
+    --box-shadow: 0 6px 14px rgba(232, 62, 77, 0.17);
+}
+
+.search-container ion-button[fill="clear"] {
+    --background: transparent;
+    --color: #77718e;
+    --box-shadow: none;
+}
+
+/* Títulos de sección */
+.section-heading {
+    padding: 12px 20px 8px;
+}
+
+.section-heading h2 {
+    margin: 0 0 7px;
+    color: var(--text-primary);
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.section-heading p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Tarjetas de la lista */
+.pokemon-item {
+    height: calc(100% - 8px);
+    margin: 4px 0;
+    overflow: hidden;
+    text-align: center;
+    background: var(--card-bg);
+    border: 1px solid rgba(130, 115, 170, 0.08);
+    border-radius: 21px;
+    box-shadow: 0 5px 18px rgba(55, 42, 95, 0.045);
+    transition: transform 0.2s ease;
+}
+
+.pokemon-item:active {
+    transform: scale(0.97);
+}
+
+.pokemon-item ion-card-content {
+    padding: 18px 8px 16px;
+}
+
+.pokemon-number {
+    color: #a09bb2;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.pokemon-item h3 {
+    margin: 10px 0 13px;
+    color: var(--text-primary);
+    font-size: 15px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.pokemon-item ion-button {
+    min-height: 31px;
+    margin: 0;
+    font-size: 10px;
+    font-weight: 700;
+    --border-radius: 10px;
+    --border-color: #f3cbd0;
+    --color: var(--accent);
+}
+
+/* Detalle del Pokémon */
+.pokemon-detail {
+    margin: 18px;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid rgba(130, 115, 170, 0.08);
+    border-radius: 26px;
+    box-shadow: 0 8px 28px rgba(55, 42, 95, 0.06);
+}
+
+.pokemon-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 230px;
+    padding: 22px;
+    background: radial-gradient(circle at center, #ffffff 0%, #f0eaff 100%);
+}
+
+.pokemon-image img {
+    display: block;
+    width: min(210px, 100%);
+    height: 210px;
+    object-fit: contain;
+}
+
+.pokemon-detail ion-card-header {
+    padding: 20px 20px 8px;
+    text-align: center;
+}
+
+.pokemon-detail ion-card-subtitle {
+    margin-bottom: 7px;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.pokemon-detail ion-card-title {
+    color: var(--text-primary);
+    font-size: 29px;
+    font-weight: 850;
+    letter-spacing: -0.7px;
+}
+
+.pokemon-detail ion-card-content {
+    padding: 8px 20px 22px;
+}
+
+.pokemon-detail h2 {
+    margin: 23px 0 13px;
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.type-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.type-list ion-badge {
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Altura y peso */
+.stat-box {
+    height: 100%;
+    padding: 17px 8px;
+    text-align: center;
+    background: #f7f5fc;
+    border: 1px solid #efebf8;
+    border-radius: 17px;
+}
+
+.stat-box ion-icon {
+    color: var(--accent);
+    font-size: 23px;
+}
+
+.stat-box p {
+    margin: 9px 0 6px;
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.stat-box strong {
+    color: var(--text-primary);
+    font-size: 17px;
+    font-weight: 800;
+}
+
+/* Estadísticas */
+.stat-row {
+    margin-bottom: 17px;
+}
+
+.stat-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+    color: #77718e;
+    font-size: 12px;
+}
+
+.stat-heading strong {
+    color: var(--text-primary);
+    font-size: 13px;
+}
+
+.stat-row ion-progress-bar {
+    height: 7px;
+    overflow: hidden;
+    --background: #f0edf7;
+    --progress-background: var(--accent);
+    border-radius: 10px;
+}
+
+/* Carga y errores */
+.message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.message ion-spinner {
+    width: 36px;
+    height: 36px;
+}
+
+.message p {
+    font-size: 13px;
+}
+
+.error-card {
+    margin: 12px 18px;
+    color: #a72f40;
+    background: #fff0f1;
+    border: 1px solid #f8d9de;
+    border-radius: 15px;
+    box-shadow: none;
+}
+
+.error-card ion-card-content {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.error-card ion-icon {
+    margin-right: 7px;
+    vertical-align: middle;
+    font-size: 19px;
+}
+
+/* Pantallas pequeñas */
+@media (max-width: 360px) {
+    .hero {
+        padding: 25px 17px;
+    }
+
+    .search-container {
+        padding-inline: 13px;
+    }
+
+    .pokemon-detail {
+        margin: 12px;
+    }
+
+    .pokemon-detail ion-card-content {
+        padding-inline: 15px;
+    }
+
+    .pokemon-item ion-card-content {
+        padding-inline: 5px;
+    }
+
+    .pokemon-item h3 {
+        font-size: 13px;
+    }
+}
+
+.pokemon-thumbnail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 115px;
+    margin: 12px 0 8px;
+    background: #f7f5fc;
+    border-radius: 16px;
+}
+
+.pokemon-thumbnail img {
+    display: block;
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+}
+
+
+.pokemon-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.gallery-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 130px;
+    padding: 10px;
+    background: #f7f5fc;
+    border-radius: 16px;
+}
+
+.gallery-item img {
+    width: 100%;
+    max-width: 140px;
+    height: 120px;
+    object-fit: contain;
+}
+
+.pokemon-animation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 130px;
+    margin: 16px 0;
+    background: #f7f5fc;
+    border-radius: 16px;
+}
+
+.pokemon-animation img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+}
+
+
+/* Pestañas de navegación */
+.page-tabs {
+    display: flex;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #ffffff;
+}
+
+.page-tabs ion-button {
+    flex: 1;
+    margin: 0;
+    min-width: 0;
+    font-size: 12px;
+}
+
+/* Sección de comparación */
+.compare-section {
+    padding-bottom: 24px;
+}
+
+.compare-section>.hero {
+    padding: 24px 16px;
+}
+
+.compare-section>ion-card {
+    margin: 16px;
+    border-radius: 18px;
+}
+
+.compare-section ion-item {
+    --background: #ffffff;
+    --border-color: #eee8f5;
+    margin-bottom: 8px;
+}
+
+.compare-section ion-card-title {
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+}
+
+.comparison-card {
+    margin: 4px;
+    height: calc(100% - 8px);
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(40, 20, 60, 0.08);
+}
+
+.comparison-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 110px;
+    padding: 8px;
+    background: #f7f5fc;
+}
+
+.comparison-image img {
+    width: 100%;
+    max-width: 150px;
+    height: 110px;
+    object-fit: contain;
+}
+
+.comparison-card ion-card-header {
+    padding: 10px 8px;
+}
+
+.comparison-card ion-card-content {
+    padding: 8px;
+    font-size: 12px;
+}
+
+.comparison-card ion-card-content p {
+    overflow-wrap: anywhere;
+}
+
+.comparison-card h3 {
+    margin-top: 18px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.comparison-card .type-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.comparison-stat {
+    margin: 12px 0;
+}
+
+.comparison-stat .stat-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;
+    margin-bottom: 5px;
+    font-size: 11px;
+}
+
+.comparison-stat ion-progress-bar {
+    height: 6px;
+    border-radius: 8px;
+}
+
+@media (max-width: 360px) {
+    .page-tabs {
+        padding: 8px;
+        gap: 6px;
+    }
+
+    .page-tabs ion-button {
+        font-size: 10px;
+    }
+
+    .comparison-card ion-card-title {
+        font-size: 13px;
+    }
+
+    .comparison-card ion-card-content {
+        font-size: 11px;
+    }
+}
+
+ion-input,
+ion-searchbar {
+    --color: #29213d;
+    --background: #ffffff;
+    --placeholder-color: #817995;
+}
+
+ion-toolbar {
+    --background: #7c3aed;
+    --color: #ffffff;
+}
+
+ion-button {
+    --border-radius: 12px;
+    text-transform: none;
+}
